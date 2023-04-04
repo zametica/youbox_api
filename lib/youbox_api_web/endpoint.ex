@@ -12,6 +12,7 @@ defmodule YouboxApiWeb.Endpoint do
   ]
 
   # socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  socket "/socket", YouboxApiWeb.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -37,6 +38,8 @@ defmodule YouboxApiWeb.Endpoint do
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
+
+  plug CORSPlug, origin: "*"
 
   plug Plug.MethodOverride
   plug Plug.Head

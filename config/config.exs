@@ -26,6 +26,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :youbox_api, YouboxApiWeb.Auth.Guardian,
+    issuer: "youbox_api",
+    secret_key: "o7iHTWEdHphm0/1azFxOQa2pJEZVf7wpMm8qNCVpnmJYo7ABaMdlj38WZ0TBVQbZ"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

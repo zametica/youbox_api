@@ -15,6 +15,12 @@ defmodule YouboxApiWeb.UserJSON do
     %{data: data(user)}
   end
 
+  def access_token(%{token: token}) do
+    %{
+      access_token: token
+    }
+  end
+
   defp data(%User{} = user) do
     %{
       id: user.id,

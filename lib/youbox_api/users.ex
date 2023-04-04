@@ -37,6 +37,12 @@ defmodule YouboxApi.Users do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user_by_email(email) do
+    User
+    |> where(email: ^email)
+    |> Repo.one()
+  end
+
   @doc """
   Creates a user.
 

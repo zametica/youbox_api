@@ -1,6 +1,8 @@
 defmodule YouboxApiWeb.UserController do
   use YouboxApiWeb, :controller
 
+  alias YouboxApiWeb.Auth.ErrorResponse.Unauthorized
+  alias YouboxApiWeb.Auth.Guardian
   alias YouboxApi.Users
   alias YouboxApi.Users.User
 
@@ -12,11 +14,22 @@ defmodule YouboxApiWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Users.create_user(user_params) do
+    with {:ok, %User{} = user} <- Users.create_user(user_params),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/users/#{user}")
-      |> render(:show, user: user)
+      |> render(:access_token, token: token)
+    end
+  end
+
+  def sign_in(conn, %{"email" => email, "password" => password}) do
+    case Guardian.authenticate(email, password) do
+      {:ok, _user, token} ->
+        conn
+        |> put_status(:ok)
+        |> render(:access_token, token: token)
+      {:error, :unauthorized} ->
+        raise Unauthorized
     end
   end
 
