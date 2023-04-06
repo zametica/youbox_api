@@ -15,9 +15,10 @@ defmodule YouboxApiWeb.UserJSON do
     %{data: data(user)}
   end
 
-  def access_token(%{token: token}) do
+  def access_token(%{token: token, user: user}) do
     %{
-      access_token: token
+      access_token: token,
+      user_id: user.id
     }
   end
 

@@ -28,6 +28,7 @@ defmodule YouboxApiWeb.Router do
   scope "/api", YouboxApiWeb do
     pipe_through [:api, :auth]
 
-    resources "/rooms", RoomController, only: [:create, :show]
+    resources "/rooms", RoomController, only: [:create, :index]
+    resources "/events", EventController, only: [:index]
   end
 end

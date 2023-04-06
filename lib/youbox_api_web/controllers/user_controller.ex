@@ -13,7 +13,7 @@ defmodule YouboxApiWeb.UserController do
     render(conn, :index, users: users)
   end
 
-  def create(conn, %{"user" => user_params}) do
+  def create(conn, user_params) do
     with {:ok, %User{} = user} <- Users.create_user(user_params),
          {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
@@ -24,10 +24,10 @@ defmodule YouboxApiWeb.UserController do
 
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case Guardian.authenticate(email, password) do
-      {:ok, _user, token} ->
+      {:ok, user, token} ->
         conn
         |> put_status(:ok)
-        |> render(:access_token, token: token)
+        |> render(:access_token, token: token, user: user)
       {:error, :unauthorized} ->
         raise Unauthorized
     end
